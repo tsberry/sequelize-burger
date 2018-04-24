@@ -1,0 +1,15 @@
+<li class="list-group-item">
+    <div class="row">
+        <div class="col-md-6 text-center">
+            <p class="">{{burger_name}}</p>
+        </div>
+        <div class="col-md-6">
+            <div class="btn-group" role="group">
+                {{#unless devoured}}
+                    <button type="button" class="burger-button btn btn-default" data-id="{{id}}" }>Eat Me!</button>
+                {{/unless}}
+                <button type="button" class="delete-button btn btn-default" data-id="{{id}}" }>Delete!</button>
+            </div>
+        </div>
+    </div>
+</li>

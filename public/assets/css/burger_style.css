@@ -1,0 +1,17 @@
+body {
+    background-color: gold;
+    font-family: 'Cabin Sketch', cursive;
+}
+
+.list-group-item .row {
+    font-size: 2rem;
+}
+
+#burger-submit {
+    float: right;
+    width: 50%;
+}
+
+#burger-text {
+    width: 50%;
+}

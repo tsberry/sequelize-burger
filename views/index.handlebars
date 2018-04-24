@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Burger Eater</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Burgers Not Yet Eaten</h2>
+            <ul class="list-group">
+                {{#each burgers}} {{#unless devoured}} {{> burgerblock devoured=false}} {{/unless}} {{/each}}
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <img class="img-responsive" src="/assets/img/burger.jpg">
+            </div>
+            <div class="row">
+            <form id="burger-form" class="form-inline">
+                <input id="burger-text" class="form-control" type="text" name="name">
+                <input id="burger-submit" class="form-control btn btn-default btn-danger" type="submit" name="submit" value="Submit your burger">
+            </form>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h2>Burgers Already Eaten</h2>
+
+            <ul class="list-group">
+                {{#each burgers}} {{#if devoured}} {{> burgerblock devoured=true}} {{/if}} {{/each}}
+            </ul>
+        </div>
+    </div>
+</div>
