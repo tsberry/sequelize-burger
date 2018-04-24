@@ -3,27 +3,27 @@ var burger = require("../models/burger.js");
 
 // Intializes router
 var router = express.Router();
+var burger = require("../models").burger;
 
 router.get("/", function (req, res) {
-    burger.selectAll(function (data) {
+    burger.findAll().then(function (data) {
         var hbsObject = {
             burgers: data
         };
-        console.log(hbsObject);
         res.render("index", hbsObject);
     });
 });
 
 // The get route selects the burgers
 router.get("/api/burgers", function (req, res) {
-    burger.selectAll(function (data) {
+    burger.findAll().then(function (data) {
         res.json(data);
     });
 });
 
 // The post route inserts a burger
 router.post("/api/burgers", function (req, res) {
-    burger.insertOne(req.body.name, function (data) {
+    burger.create({burger_name: req.body.name}).then(function (data) {
         res.json({
             "message": "Burger added",
             "data": data
@@ -33,15 +33,13 @@ router.post("/api/burgers", function (req, res) {
 
 // The put route devours a burger
 router.put("/api/burgers/:id", function (req, res) {
-    burger.updateOne(req.params.id, function (data) {
-        if(data.affectedRows === 0) return res.status(500).end();
+    burger.update({devoured: true}, {where: {id: req.params.id}}).then(function (data) {
         res.end();
     });
 });
 
 router.delete("/api/burgers/:id", function (req, res) {
-    burger.delete(req.params.id, function (data) {
-        if(data.affectedRows === 0) return res.status(500).end();
+    burger.destroy({where: {id: req.params.id}}).then(function (data) {
         res.end();
     });
 });
