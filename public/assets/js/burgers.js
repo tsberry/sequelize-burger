@@ -1,7 +1,9 @@
 $(function () {
     $("body").on("click", ".burger-button", function (event) {
         var id = $(this).data("id");
-        $.ajax(`/api/burgers/${id}`, {type:"PUT"}).then(function() {
+        var customer = $(`#${id}-input`).val();
+        console.log(customer);
+        $.ajax(`/api/burgers/${id}/${customer}`, {type:"PUT"}).then(function() {
             console.log("Devoured burger.");
             location.reload();
         });

@@ -4,6 +4,10 @@ module.exports = function(sequelize, DataTypes) {
         devoured: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
+        },
+        eaten_by: {
+            type: DataTypes.STRING,
+            defaultValue: ""
         }
     }, {timestamps: false});
     return Burger;

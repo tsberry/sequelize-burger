@@ -1,9 +1,9 @@
 var express = require("express");
-var burger = require("../models/burger.js");
 
 // Intializes router
 var router = express.Router();
 var burger = require("../models").burger;
+var customer = require("../models").customer;
 
 router.get("/", function (req, res) {
     burger.findAll().then(function (data) {
@@ -21,6 +21,12 @@ router.get("/api/burgers", function (req, res) {
     });
 });
 
+router.get("/api/customers", function (req, res) {
+    customer.findAll().then(function (data) {
+        res.json(data);
+    })
+});
+
 // The post route inserts a burger
 router.post("/api/burgers", function (req, res) {
     burger.create({burger_name: req.body.name}).then(function (data) {
@@ -32,9 +38,13 @@ router.post("/api/burgers", function (req, res) {
 });
 
 // The put route devours a burger
-router.put("/api/burgers/:id", function (req, res) {
-    burger.update({devoured: true}, {where: {id: req.params.id}}).then(function (data) {
-        res.end();
+router.put("/api/burgers/:id/:customer", function (req, res) {
+    burger.update({devoured: true, eaten_by: req.params.customer}, {where: {id: req.params.id}})
+    .then(function (data) {
+        customer.upsert({customer_name: req.params.customer, burgers_eaten: req.params.id})
+        .then(function (data) {
+            res.end();
+        })
     });
 });
 

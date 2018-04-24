@@ -6,10 +6,20 @@
         <div class="col-md-6">
             <div class="btn-group" role="group">
                 {{#unless dataValues.devoured}}
-                    <button type="button" class="burger-button btn btn-default" data-id="{{dataValues.id}}">Eat Me!</button>
+                <button type="button" class="burger-button btn btn-default" data-id="{{dataValues.id}}">Eat Me!</button>
                 {{/unless}}
                 <button type="button" class="delete-button btn btn-default" data-id="{{dataValues.id}}">Delete!</button>
             </div>
+            {{#unless dataValues.devoured}}
+            <form class="form-inline">
+                <div class="form-group">
+                    <input id="{{dataValues.id}}-input" class="form-control" type="text" placeholder="Name">
+                </div>
+            </form>
+            {{/unless}}
+            {{#if dataValues.devoured}}
+                <div>Eaten by: {{dataValues.eaten_by}}</div>
+            {{/if}}
         </div>
     </div>
 </li>
