@@ -8,7 +8,7 @@
         <div class="col-md-4">
             <h2>Burgers Not Yet Eaten</h2>
             <ul class="list-group">
-                {{#each burgers}} {{#unless dataValues.devoured}} {{> burgerblock devoured=false}} {{/unless}} {{/each}}
+                {{#each burgers}} {{#unless devoured}} {{> burgerblock devoured=false}} {{/unless}} {{/each}}
             </ul>
         </div>
         <div class="col-md-4">
@@ -26,8 +26,13 @@
             <h2>Burgers Already Eaten</h2>
 
             <ul class="list-group">
-                {{#each burgers}} {{#if dataValues.devoured}} {{> burgerblock devoured=true}} {{/if}} {{/each}}
+                {{#each burgers}} {{#if devoured}} {{> burgerblock devoured=true}} {{/if}} {{/each}}
             </ul>
         </div>
+    </div>
+    <div class="row">
+        {{#each customers}}
+            {{> customerblock}}
+        {{/each}}
     </div>
 </div>

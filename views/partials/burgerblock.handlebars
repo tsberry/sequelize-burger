@@ -1,24 +1,24 @@
 <li class="list-group-item">
     <div class="row">
         <div class="col-md-6 text-center">
-            <p class="">{{dataValues.burger_name}}</p>
+            <p class="">{{burger_name}}</p>
         </div>
         <div class="col-md-6">
             <div class="btn-group" role="group">
-                {{#unless dataValues.devoured}}
-                <button type="button" class="burger-button btn btn-default" data-id="{{dataValues.id}}">Eat Me!</button>
+                {{#unless devoured}}
+                <button type="button" class="burger-button btn btn-default" data-id="{{id}}">Eat Me!</button>
                 {{/unless}}
-                <button type="button" class="delete-button btn btn-default" data-id="{{dataValues.id}}">Delete!</button>
+                <button type="button" class="delete-button btn btn-default" data-id="{{id}}">Delete!</button>
             </div>
-            {{#unless dataValues.devoured}}
+            {{#unless devoured}}
             <form class="form-inline">
                 <div class="form-group">
-                    <input id="{{dataValues.id}}-input" class="form-control" type="text" placeholder="Name">
+                    <input id="{{id}}-input" class="form-control" type="text" placeholder="Name">
                 </div>
             </form>
             {{/unless}}
-            {{#if dataValues.devoured}}
-                <div>Eaten by: {{dataValues.eaten_by}}</div>
+            {{#if devoured}}
+                <div>Eaten by: {{customer_name}}</div>
             {{/if}}
         </div>
     </div>

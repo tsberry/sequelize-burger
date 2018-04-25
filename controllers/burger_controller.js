@@ -2,34 +2,56 @@ var express = require("express");
 
 // Intializes router
 var router = express.Router();
-var burger = require("../models").burger;
-var customer = require("../models").customer;
+var Burger = require("../models").Burger;
+var Customer = require("../models").Customer;
+
+function prune(data) {
+    var pruned = [];
+    for (var i = 0; i < data.length; i++) {
+        pruned.push(data[i].dataValues);
+    }
+    return pruned;
+}
 
 router.get("/", function (req, res) {
-    burger.findAll().then(function (data) {
-        var hbsObject = {
-            burgers: data
-        };
-        res.render("index", hbsObject);
-    });
+    Burger.findAll({ include: [{ model: Customer }] })
+        .then(function (bdata) {
+            var burgers = prune(bdata);
+            var hbsObject = {
+                burgers: burgers,
+            };
+            res.render("index", hbsObject);
+        });
 });
 
 // The get route selects the burgers
 router.get("/api/burgers", function (req, res) {
-    burger.findAll().then(function (data) {
+    Burger.findAll({ include: [{ model: Customer }] }).then(function (data) {
         res.json(data);
     });
 });
 
 router.get("/api/customers", function (req, res) {
-    customer.findAll().then(function (data) {
+    Customer.findAll().then(function (data) {
         res.json(data);
     })
 });
 
+router.get("/api/customers/:id", function (req, res) {
+    Customer.findOne({ where: { id: req.params.id } })
+        .then(function (cdata) {
+            // console.log(cdata);
+            var cust = cdata.dataValues;
+            Burger.findAll({ where: { id: cust.burgers_eaten } })
+                .then(function (bdata) {
+                    res.json(bdata);
+                });
+        });
+});
+
 // The post route inserts a burger
 router.post("/api/burgers", function (req, res) {
-    burger.create({burger_name: req.body.name}).then(function (data) {
+    Burger.create({ burger_name: req.body.name }).then(function (data) {
         res.json({
             "message": "Burger added",
             "data": data
@@ -39,17 +61,19 @@ router.post("/api/burgers", function (req, res) {
 
 // The put route devours a burger
 router.put("/api/burgers/:id/:customer", function (req, res) {
-    burger.update({devoured: true, eaten_by: req.params.customer}, {where: {id: req.params.id}})
-    .then(function (data) {
-        customer.upsert({customer_name: req.params.customer, burgers_eaten: req.params.id})
-        .then(function (data) {
-            res.end();
-        })
-    });
+    Customer.findOrCreate({ where: { customer_name: req.params.customer } })
+        .then(function (customerdata) {
+            Burger.update({ devoured: true, customer_name: customerdata[0].dataValues.customer_name, customerId: customerdata[0].dataValues.id }, {
+                where: { id: req.params.id },
+            })
+                .then(function (burgerdata) {
+                    res.end();
+                })
+        });
 });
 
 router.delete("/api/burgers/:id", function (req, res) {
-    burger.destroy({where: {id: req.params.id}}).then(function (data) {
+    Burger.destroy({ where: { id: req.params.id } }).then(function (data) {
         res.end();
     });
 });
